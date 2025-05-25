@@ -4,70 +4,51 @@
 
 function dii_all_students() {
     ?>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
+    
 
-<div class="container">
-  <h2>All Students</h2>
-       
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Email</th>
-        <th>Address</th>
-        <th>Batch</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
+    <div class="wrap">
+    <h2>All Students</h2>
 
-      <tr>
-        <td>John</td>
-        <td>012453698</td>
-        <td>Eemail@gmail.com</td>
-        <td>address</td>
-        <td>batch</td>
-        <td><a class="btn btn-primary" href="">Edit</a></td>
-        <td><a class="btn btn-danger" href="">Delete</a></td>
-      </tr>
+    <table class="wp-list-table widefat fixed striped table-view-list">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
+                <th scope="col">Batch</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
 
-      <tr>
-        <td>John</td>
-        <td>012453698</td>
-        <td>Eemail@gmail.com</td>
-        <td>address</td>
-        <td>batch</td>
-        <td><a class="btn btn-primary" href="">Edit</a></td>
-        <td><a class="btn btn-danger" href="">Delete</a></td>
-      </tr>
+            global $wpdb;
 
-      <tr>
-        <td>John</td>
-        <td>012453698</td>
-        <td>Eemail@gmail.com</td>
-        <td>address</td>
-        <td>batch</td>
-        <td><a class="btn btn-primary" href="">Edit</a></td>
-        <td><a class="btn btn-danger" href="">Delete</a></td>
-      </tr>
-      
-    </tbody>
-  </table>
+            $table_name = $wpdb->prefix . 'dii_students';
+
+            $students = $wpdb->get_results("SELECT * FROM $table_name");
+
+            if ($students) {
+                foreach ($students as $student) {
+                    echo '<tr>';
+                    echo '<td>' . esc_html($student->name) . '</td>';
+                    echo '<td>' . esc_html($student->phone) . '</td>';
+                    echo '<td>' . esc_html($student->email) . '</td>';
+                    echo '<td>' . esc_html($student->address) . '</td>';
+                    echo '<td>' . esc_html($student->batch) . '</td>';
+                    echo '<td><a class="button button-primary" href="?page=edit-student&id=' . esc_attr($student->id) . '">Edit</a></td>';
+                    echo '<td><a class="button button-danger delete-student" href="?page=delete-student&id=' . esc_attr($student->id) . '" onclick="return confirm(\'Are you sure you want to delete this student?\')">Delete</a></td>';
+                    echo '</tr>';
+                }
+            } else {
+                echo '<tr><td colspan="7">No students found.</td></tr>';
+            }
+            ?>
+        </tbody>
+    </table>
 </div>
 
-</body>
-</html>
-
-    <?php
+<?php
 }

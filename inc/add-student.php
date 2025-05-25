@@ -1,5 +1,30 @@
 <?php 
 function dii_add_student() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'dii_students';
+
+    // Handle form submission
+    if (
+        isset($_POST['student_name']) &&
+        check_admin_referer('save_student_data')
+    ) {
+        $name    = sanitize_text_field($_POST['student_name']);
+        $phone   = sanitize_text_field($_POST['student_phone']);
+        $email   = sanitize_email($_POST['student_email']);
+        $address = sanitize_textarea_field($_POST['student_address']);
+        $batch   = sanitize_text_field($_POST['student_batch']);
+
+        $wpdb->insert($table_name, [
+            'name'    => $name,
+            'phone'   => $phone,
+            'email'   => $email,
+            'address' => $address,
+            'batch'   => $batch,
+        ]);
+
+        echo '<div class="notice notice-success is-dismissible"><p>Student added successfully!</p></div>';
+    }
+
     ?>
     <div class="wrap">
         <h1>Add Student</h1>
